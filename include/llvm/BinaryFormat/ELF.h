@@ -311,6 +311,8 @@ enum {
   EM_RISCV = 243,         // RISC-V
   EM_LANAI = 244,         // Lanai 32-bit processor
   EM_BPF = 247,           // Linux kernel bpf virtual machine
+
+  EM_AGC = 1969,          // Apollo Guidance Computer
 };
 
 // Object file classes.
@@ -408,6 +410,11 @@ enum {
 // ELF Relocation types for AArch64
 enum {
 #include "ELFRelocs/AArch64.def"
+};
+
+// EKF Relocation types for AGC
+enum {
+#include "ELFRelocs/AGC.def"
 };
 
 // ARM Specific e_flags

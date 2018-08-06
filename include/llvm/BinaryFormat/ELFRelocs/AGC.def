@@ -1,0 +1,9 @@
+
+#ifndef ELF_RELOC
+#error "ELF_RELOC must be defined"
+#endif
+
+// No relocation
+ELF_RELOC(R_AGC_NONE,        0)
+// General 16-bit relocation
+ELF_RELOC(R_AGC_16,          1)

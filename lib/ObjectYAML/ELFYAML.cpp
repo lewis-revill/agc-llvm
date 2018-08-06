@@ -216,6 +216,7 @@ void ScalarEnumerationTraits<ELFYAML::ELF_EM>::enumeration(
   ECase(EM_RISCV);
   ECase(EM_LANAI);
   ECase(EM_BPF);
+  ECase(EM_AGC);
 #undef ECase
 }
 
@@ -634,6 +635,9 @@ void ScalarEnumerationTraits<ELFYAML::ELF_REL>::enumeration(
     break;
   case ELF::EM_AARCH64:
 #include "llvm/BinaryFormat/ELFRelocs/AArch64.def"
+    break;
+  case ELF::EM_AGC:
+#include "llvm/BinaryFormat/ELFRelocs/AGC.def"
     break;
   case ELF::EM_ARM:
 #include "llvm/BinaryFormat/ELFRelocs/ARM.def"
