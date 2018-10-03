@@ -21,5 +21,3 @@ extern "C" void LLVMInitializeAGCTargetInfo() {
   RegisterTarget<Triple::agc> A(getTheAGCTarget(), "agc",
                                 "Apollo Guidance Computer", "AGC");
 }
-
-extern "C" void LLVMInitializeAGCTargetMC() {}

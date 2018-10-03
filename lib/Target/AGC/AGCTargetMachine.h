@@ -33,8 +33,6 @@ public:
     return TLOF.get();
   }
 };
-
-Target &getTheAGCTarget();
 } // namespace llvm
 
 #endif

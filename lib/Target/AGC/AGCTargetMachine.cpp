@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "AGCTargetMachine.h"
+#include "MCTargetDesc/AGCMCTargetDesc.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
