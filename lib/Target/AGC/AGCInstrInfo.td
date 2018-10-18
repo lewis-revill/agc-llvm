@@ -17,19 +17,33 @@ include "AGCInstrFormats.td"
 // Operand and SDNode transformation definitions
 //===----------------------------------------------------------------------===//
 
+class AGCAsmOperand<string N> : AsmOperandClass {
+  let Name = N;
+  let RenderMethod = "addImmOperands";
+  let DiagnosticType = !strconcat("Invalid", Name);
+}
+
 // A 12 bit address into general purpose memory, encompassing erasable and
 // read-only memory locations.
-def mem12 : Operand<i16>;
+def mem12 : Operand<i16> {
+  let ParserMatchClass = AGCAsmOperand<"Mem12">;
+}
 
 // A 10 bit address into general purpose memory, encompassing only erasable
 // memory locations.
-def mem10 : Operand<i16>;
+def mem10 : Operand<i16> {
+  let ParserMatchClass = AGCAsmOperand<"Mem10">;
+}
 
 // A 9 bit address into IO channel memory.
-def io9 : Operand<i16>;
+def io9 : Operand<i16> {
+  let ParserMatchClass = AGCAsmOperand<"IO9">;
+}
 
 // A 12 bit address to instruction locations.
-def address12 : Operand<i16>;
+def address12 : Operand<i16> {
+  let ParserMatchClass = AGCAsmOperand<"Address12">;
+}
 
 //===----------------------------------------------------------------------===//
 // Instruction class templates

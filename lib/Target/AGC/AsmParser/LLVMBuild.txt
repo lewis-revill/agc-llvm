@@ -1,4 +1,4 @@
-;===- ./lib/Target/AGC/LLVMBuild.txt ---------------------------*- Conf -*--===;
+;===- ./lib/Target/AGC/AsmParser/LLVMBuild.txt -----------------*- Conf -*--===;
 ;
 ;                     The LLVM Compiler Infrastructure
 ;
@@ -15,18 +15,9 @@
 ;
 ;===------------------------------------------------------------------------===;
 
-[common]
-subdirectories = AsmParser MCTargetDesc TargetInfo
-
 [component_0]
-type = TargetGroup
-name = AGC
-parent = Target
-has_asmparser = 1
-
-[component_1]
 type = Library
-name = AGCCodeGen
+name = AGCAsmParser
 parent = AGC
-required_libraries = Core CodeGen Support Target AGCInfo
+required_libraries = MC MCParser Support AGCDesc AGCInfo
 add_to_library_groups = AGC

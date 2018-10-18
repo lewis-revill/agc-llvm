@@ -1,5 +1,6 @@
 set(LLVM_TARGET_DEFINITIONS AGC.td)
 
+tablegen(LLVM AGCGenAsmMatcher.inc -gen-asm-matcher)
 tablegen(LLVM AGCGenRegisterInfo.inc -gen-register-info)
 tablegen(LLVM AGCGenInstrInfo.inc -gen-instr-info)
 tablegen(LLVM AGCGenMCCodeEmitter.inc -gen-emitter)
@@ -11,5 +12,6 @@ add_llvm_target(AGCCodeGen
   AGCTargetMachine.cpp
   )
 
+add_subdirectory(AsmParser)
 add_subdirectory(MCTargetDesc)
 add_subdirectory(TargetInfo)

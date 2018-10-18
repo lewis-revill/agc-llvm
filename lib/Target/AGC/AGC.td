@@ -22,6 +22,10 @@ include "AGCInstrInfo.td"
 
 def AGCInstrInfo : InstrInfo;
 
+def AGCAsmParser : AsmParser {
+  let ShouldEmitMatchRegisterAltName = 0;
+}
+
 //===----------------------------------------------------------------------===//
 // AGC processors
 //===----------------------------------------------------------------------===//
@@ -35,4 +39,5 @@ def : ProcessorModel<"agc-block2", NoSchedModel, []>;
 
 def AGC : Target {
   let InstructionSet = AGCInstrInfo;
+  let AssemblyParsers = [AGCAsmParser];
 }
