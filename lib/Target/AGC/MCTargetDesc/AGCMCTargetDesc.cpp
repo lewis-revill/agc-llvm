@@ -13,6 +13,7 @@
 
 #include "AGCMCTargetDesc.h"
 #include "AGCMCAsmInfo.h"
+#include "InstPrinter/AGCInstPrinter.h"
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
@@ -46,6 +47,14 @@ static MCAsmInfo *createAGCMCAsmInfo(const MCRegisterInfo &MRI,
   return new AGCMCAsmInfo(TT);
 }
 
+static MCInstPrinter *createAGCMCInstPrinter(const Triple &T,
+                                             unsigned SyntaxVariant,
+                                             const MCAsmInfo &MAI,
+                                             const MCInstrInfo &MII,
+                                             const MCRegisterInfo &MRI) {
+  return new AGCInstPrinter(MAI, MII, MRI);
+}
+
 extern "C" void LLVMInitializeAGCTargetMC() {
   Target &T = getTheAGCTarget();
   TargetRegistry::RegisterMCAsmInfo(T, createAGCMCAsmInfo);
@@ -54,4 +63,5 @@ extern "C" void LLVMInitializeAGCTargetMC() {
   TargetRegistry::RegisterMCSubtargetInfo(T, createAGCMCSubtargetInfoImpl);
   TargetRegistry::RegisterMCCodeEmitter(T, createAGCMCCodeEmitter);
   TargetRegistry::RegisterMCAsmBackend(T, createAGCAsmBackend);
+  TargetRegistry::RegisterMCInstPrinter(T, createAGCMCInstPrinter);
 }
