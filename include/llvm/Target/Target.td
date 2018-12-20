@@ -549,6 +549,11 @@ class Instruction {
   // decode the bitpattern as InstA too.
   bit hasCompleteDecoder = 1;
 
+  /// DecodeNullOps - Whether this instruction has operands with no encoding,
+  /// implying that decoding should produce null operands for this instruction
+  /// when there are no bits to decode.
+  bit DecodeNullOps = 0;
+
   /// Target-specific flags. This becomes the TSFlags field in TargetInstrDesc.
   bits<64> TSFlags = 0;
 
