@@ -614,6 +614,9 @@ private:
 
   bool parseDirectiveAbort(); // ".abort"
   bool parseDirectiveInclude(); // ".include"
+  /* BEGIN AGC CODE */
+  bool parseAGCFileDirective(StringRef IDVal); // "$filename"
+  /* END AGC CODE */
   bool parseDirectiveIncbin(); // ".incbin"
 
   // ".if", ".ifeq", ".ifge", ".ifgt" , ".ifle", ".iflt" or ".ifne"
@@ -2156,6 +2159,11 @@ bool AsmParser::parseStatement(ParseStatementInfo &Info,
 
     return Error(IDLoc, "unknown directive");
   }
+
+  /* BEGIN AGC CODE */
+  if (IDVal[0] == '$' && IDVal != "$")
+    return parseAGCFileDirective(IDVal.drop_front());
+  /* END AGC CODE */
 
   // __asm _emit or __asm __emit
   if (ParsingInlineAsm && (IDVal == "_emit" || IDVal == "__emit" ||
@@ -4844,6 +4852,29 @@ bool AsmParser::parseDirectiveInclude() {
 
   return false;
 }
+
+/* BEGIN AGC CODE */
+/// parseAGCFileDirective
+///  ::= $filename
+bool AsmParser::parseAGCFileDirective(StringRef Filename) {
+  SMLoc DirectiveLoc = getTok().getLoc();
+
+  // Since the filename is not escaped it may appear as multiple tokens.
+  // Retrieve the full filename by combining the strings.
+  if (getTok().isNot(AsmToken::EndOfStatement)) {
+    unsigned Length = Filename.size() + getTok().getString().size() +
+                      getLexer().LexUntilEndOfStatement().size();
+    Filename = StringRef(Filename.data(), Length);
+  }
+  // Attempt to switch the lexer to the included file before consuming the
+  // end of statement to avoid losing it when we switch.
+  if (check(enterIncludeFile(Filename.str()), DirectiveLoc,
+            "Could not find file '" + Filename.str() + "'"))
+    return true;
+
+  return false;
+}
+/* END AGC CODE */
 
 /// parseDirectiveIncbin
 ///  ::= .incbin "filename" [ , skip [ , count ] ]
