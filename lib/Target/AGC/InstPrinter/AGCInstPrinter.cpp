@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "AGCInstPrinter.h"
+#include "AGCInstrInfo.h"
 #include "MCTargetDesc/AGCMCTargetDesc.h"
 #include "llvm/MC/MCExpr.h"
 #include "llvm/MC/MCInst.h"
@@ -24,11 +25,6 @@ using namespace llvm;
 
 // Include the auto-generated portion of the assembly writer.
 #include "AGCGenAsmWriter.inc"
-
-// Temporary - This should be defined in AGCInstrInfo.h
-namespace AGCII {
-enum { IsExtracode = 1 << 3 };
-}
 
 void AGCInstPrinter::printInst(const MCInst *MI, raw_ostream &O,
                                StringRef Annot, const MCSubtargetInfo &STI) {

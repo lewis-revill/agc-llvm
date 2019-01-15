@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "AGCMCCodeEmitter.h"
+#include "AGCInstrInfo.h"
 #include "AGCMCTargetDesc.h"
 #include "llvm/ADT/Statistic.h"
 #include "llvm/MC/MCExpr.h"
@@ -23,11 +24,6 @@ using namespace llvm;
 #define DEBUG_TYPE "agc-mccodeemitter"
 
 STATISTIC(MCNumEmitted, "Number of MC instructions emitted");
-
-// Temporary - This should be defined in AGCInstrInfo.h
-namespace AGCII {
-enum { IsExtracode = 1 << 3 };
-}
 
 MCCodeEmitter *llvm::createAGCMCCodeEmitter(const MCInstrInfo &MCII,
                                             const MCRegisterInfo &MRI,

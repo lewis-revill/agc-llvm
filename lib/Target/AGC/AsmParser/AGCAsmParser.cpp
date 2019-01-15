@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "MCTargetDesc/AGCMCTargetDesc.h"
+#include "AGCInstrInfo.h"
 #include "llvm/MC/MCInst.h"
 #include "llvm/MC/MCParser/MCParsedAsmOperand.h"
 #include "llvm/MC/MCParser/MCTargetAsmParser.h"
@@ -20,11 +21,6 @@
 #include "llvm/Support/TargetRegistry.h"
 
 using namespace llvm;
-
-// Temporary - This should be defined in AGCInstrInfo.h
-namespace AGCII {
-enum { IsExtracode = 1 << 3 };
-}
 
 namespace {
 class AGCAsmParser : public MCTargetAsmParser {

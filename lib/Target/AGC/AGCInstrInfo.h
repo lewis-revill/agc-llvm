@@ -21,6 +21,12 @@
 #include "AGCGenInstrInfo.inc"
 
 namespace llvm {
+
+// AGCInst definitions.
+namespace AGCII {
+enum { IsExtracode = 1 << 3 };
+}
+
 class AGCInstrInfo : public AGCGenInstrInfo {
 public:
   AGCInstrInfo();
