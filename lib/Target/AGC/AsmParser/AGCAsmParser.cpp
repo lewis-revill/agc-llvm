@@ -135,6 +135,15 @@ public:
     return (isConstantImm() && isUInt<12>(getConstantImm())) || isSymbolRef();
   }
 
+  bool isBank6() const { return isConstantImm() && getConstantImm() < 36; }
+
+  bool isBlock2() const {
+    if (!isConstantImm())
+      return false;
+    int64_t Imm = getConstantImm();
+    return isUInt<2>(Imm) && Imm != 1;
+  }
+
   /// getStartLoc - Gets location of the first token of this operand
   SMLoc getStartLoc() const override { return StartLoc; }
   /// getEndLoc - Gets location of the last token of this operand
@@ -358,6 +367,15 @@ bool AGCAsmParser::MatchAndEmitInstruction(SMLoc IDLoc, unsigned &Opcode,
     return Error(
         ErrorLoc,
         "address must be an immediate in the range [0, 4095] or a symbol");
+  }
+  case Match_InvalidBank6: {
+    SMLoc ErrorLoc = Operands[ErrorInfo]->getStartLoc();
+    return Error(ErrorLoc,
+                 "bank number must be an immediate in the range [0, 35]");
+  }
+  case Match_InvalidBlock2: {
+    SMLoc ErrorLoc = Operands[ErrorInfo]->getStartLoc();
+    return Error(ErrorLoc, "block number must be either 0, 2 or 3");
   }
   }
 }

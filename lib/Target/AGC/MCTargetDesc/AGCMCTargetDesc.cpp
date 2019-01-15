@@ -61,6 +61,7 @@ extern "C" void LLVMInitializeAGCTargetMC() {
   TargetRegistry::RegisterMCInstrInfo(T, createAGCMCInstrInfo);
   TargetRegistry::RegisterMCRegInfo(T, createAGCMCRegisterInfo);
   TargetRegistry::RegisterMCSubtargetInfo(T, createAGCMCSubtargetInfoImpl);
+  TargetRegistry::RegisterELFStreamer(T, createAGCMCELFStreamer);
   TargetRegistry::RegisterMCCodeEmitter(T, createAGCMCCodeEmitter);
   TargetRegistry::RegisterMCAsmBackend(T, createAGCAsmBackend);
   TargetRegistry::RegisterMCInstPrinter(T, createAGCMCInstPrinter);

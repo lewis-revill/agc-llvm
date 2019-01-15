@@ -56,6 +56,17 @@ def address12 : Operand<i16>, ImmLeaf<i16, [{return isUInt<12>(Imm);}]> {
   let DecoderMethod = "decodeAddress12Operand";
 }
 
+// A 6 bit immediate representing a bank number.
+def bank6 : Operand<i16>, ImmLeaf<i16, [{return Imm < 36;}]> {
+  let ParserMatchClass = AGCAsmOperand<"Bank6">;
+}
+
+// A 2 bit immediate representing a block number.
+def block2 : Operand<i16>,
+             ImmLeaf<i16, [{return isUInt<2>(Imm) && Imm != 1;}]> {
+  let ParserMatchClass = AGCAsmOperand<"Block2">;
+}
+
 //===----------------------------------------------------------------------===//
 // Instruction class templates
 //===----------------------------------------------------------------------===//
@@ -377,3 +388,19 @@ def : PatAccMem12<and, MASK>;
 let isBarrier = 1, isReturn = 1, isTerminator = 1 in
 def PseudoRET : Pseudo<(outs), (ins), "ret", "", [(RetFlag)]>,
                 PseudoInstExpansion<(TC 2)>;
+
+//===----------------------------------------------------------------------===//
+// Directives
+//===----------------------------------------------------------------------===//
+
+// Switch blocks for assembly output.
+let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+def DirectiveBLOCK : Pseudo<(outs), (ins block2:$block), "block", "$block", []>;
+
+// Switch banks for assembly output.
+let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+def DirectiveBANK : Pseudo<(outs), (ins bank6:$bank), "bank", "$bank", []>;
+
+// Print out the number of instructions in a bank for debugging.
+let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+def DirectiveBNKSUM : Pseudo<(outs), (ins bank6:$bank), "bnksum", "$bank", []>;
