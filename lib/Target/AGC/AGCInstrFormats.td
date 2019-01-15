@@ -52,6 +52,12 @@ class AGCInst<dag outs, dag ins, string opcodestr, string argstr,
 
   let Pattern = pattern;
 
+  // Most of the AGC instructions are accumulator or special-purpose register
+  // based operations, so include operands that have no encoding in the
+  // instruction but must be present in the decoded MCInst. DecodeNullOps allows
+  // tablegen to decode these operands to a default value.
+  let DecodeNullOps = 1;
+
   // Store the instruction format in target specific flags for later use.
   let TSFlags{2-0} = format.Value;
 

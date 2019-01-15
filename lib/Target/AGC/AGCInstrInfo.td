@@ -27,22 +27,26 @@ class AGCAsmOperand<string N> : AsmOperandClass {
 // read-only memory locations.
 def mem12 : Operand<i16> {
   let ParserMatchClass = AGCAsmOperand<"Mem12">;
+  let DecoderMethod = "decodeMem12Operand";
 }
 
 // A 10 bit address into general purpose memory, encompassing only erasable
 // memory locations.
 def mem10 : Operand<i16> {
   let ParserMatchClass = AGCAsmOperand<"Mem10">;
+  let DecoderMethod = "decodeMem10Operand";
 }
 
 // A 9 bit address into IO channel memory.
 def io9 : Operand<i16> {
   let ParserMatchClass = AGCAsmOperand<"IO9">;
+  let DecoderMethod = "decodeIO9Operand";
 }
 
 // A 12 bit address to instruction locations.
 def address12 : Operand<i16> {
   let ParserMatchClass = AGCAsmOperand<"Address12">;
+  let DecoderMethod = "decodeAddress12Operand";
 }
 
 //===----------------------------------------------------------------------===//
@@ -101,6 +105,7 @@ class IOReadInst<bits<6> opcode, dag outs, dag ins, string opcodestr,
   let mayLoad = 1;
   let mayStore = 0;
   let isExtracode = 1;
+  let DecoderNamespace = "Extracode";
 }
 
 // Base instruction for defining instructions which write out to an IO channel.
@@ -111,6 +116,7 @@ class IOWriteInst<bits<6> opcode, dag outs, dag ins, string opcodestr,
   let mayLoad = 0;
   let mayStore = 1;
   let isExtracode = 1;
+  let DecoderNamespace = "Extracode";
 }
 
 // Base instruction for defining instructions which read in from an IO channel
@@ -122,6 +128,7 @@ class IOReadWriteInst<bits<6> opcode, dag outs, dag ins, string opcodestr,
   let mayLoad = 1;
   let mayStore = 1;
   let isExtracode = 1;
+  let DecoderNamespace = "Extracode";
 }
 
 //===----------------------------------------------------------------------===//
@@ -155,14 +162,16 @@ def DAS : ALUWriteInst<0b01000, (outs mem10:$k_dst, AccPair:$al_wb),
 // Subtract value of general purpose memory location from accumulator. This
 // instruction writes back the original value of the memory location, so memory
 // locations which edit their contents are updated.
-let Constraints = "$k = $k_wb", isExtracode = 1 in
+let Constraints = "$k = $k_wb", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def SU : ALUWriteInst<0b11000, (outs Acc:$a_dst, mem10:$k_wb),
                       (ins Acc:$a, mem10:$k), "su">;
 
 // Modular subtract value of general purpose memory location from accumulator.
 // This instruction writes back the original value of the memory location, so
 // memory locations which edit their contents are updated.
-let Constraints = "$k = $k_wb", isExtracode = 1 in
+let Constraints = "$k = $k_wb", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def MSU : ALUWriteInst<0b01000, (outs Acc:$a_dst, mem10:$k_wb),
                        (ins Acc:$a, mem10:$k), "msu">;
 
@@ -174,7 +183,7 @@ def MASK : ALUReadInst<0b111, (outs Acc:$a_dst), (ins Acc:$a, mem12:$k),
 // Douple precision multiply value of general purpose memory location with
 // accumulator. This instruction stores the result of the multiplication in both
 // the accumulator and the lower accumulator.
-let isExtracode = 1 in
+let isExtracode = 1, DecoderNamespace = "Extracode" in
 def MP : ALUReadInst<0b111, (outs AccPair:$a_dst), (ins Acc:$a, mem12:$k),
                      "mp">;
 
@@ -186,7 +195,7 @@ def MP : ALUReadInst<0b111, (outs AccPair:$a_dst), (ins Acc:$a, mem12:$k),
 // divisor is larger than the value of the accumulator and lower accumulator
 // pair then the result is completely undefined. Note that even though the
 // operand is erasable, no editing or write back occurs.
-let isExtracode = 1 in
+let isExtracode = 1, DecoderNamespace = "Extracode" in
 def DV : ALUWriteInst<0b00100, (outs Acc:$a_dst, AccLower:$l_dst),
                       (ins AccPair:$a, mem10:$k), "dv">;
 
@@ -204,13 +213,15 @@ def ADS : ALUWriteInst<0b01011, (outs mem10:$k_dst), (ins mem10:$k, Acc:$a),
 // 'Diminish' general purpose memory location by 1. This instruction either adds
 // 1 to a negative value or subtracts 1 from a positive value. If the value is
 // zero, it is unchanged.
-let Constraints = "$k = $k_dst", isExtracode = 1 in
+let Constraints = "$k = $k_dst", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def DIM : ALUWriteInst<0b01011, (outs mem10:$k_dst), (ins mem10:$k), "dim">;
 
 // 'Augment' general purpose memory location by 1. This instruction either adds
 // 1 to a positive value or subtracts 1 from a negative value. If the value is
 // zero, it is augmented according to its sign.
-let Constraints = "$k = $k_dst", isExtracode = 1 in
+let Constraints = "$k = $k_dst", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def AUG : ALUWriteInst<0b01010, (outs mem10:$k_dst), (ins mem10:$k), "aug">;
 
 
@@ -227,7 +238,8 @@ def CA : ALUReadInst<0b011, (outs Acc:$a_dst, mem12:$k_wb), (ins mem12:$k),
 // the memory location, so memory locations which edit their contents are
 // updated. Note that this occurs even though the operand is not necessarily
 // erasable.
-let Constraints = "$k = $k_wb", isExtracode = 1 in
+let Constraints = "$k = $k_wb", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def DCA : ALUReadInst<0b011, (outs AccPair:$a_dst, mem12:$k_wb),
                       (ins mem12:$k), "dca">;
 
@@ -243,7 +255,8 @@ def CS : ALUReadInst<0b100, (outs Acc:$a_dst, mem12:$k_wb), (ins mem12:$k),
 // to accumulator pair. This instruction writes back the original value of the
 // memory location, so memory locations which edit their contents are updated.
 // Note that this occurs even though the operand is not necessarily erasable.
-let Constraints = "$k = $k_wb", isExtracode = 1 in
+let Constraints = "$k = $k_wb", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def DCS : ALUReadInst<0b100, (outs AccPair:$a_dst, mem12:$k_wb),
                       (ins mem12:$k), "dcs">;
 
@@ -271,7 +284,8 @@ def LXCH : ALUWriteInst<0b01001, (outs AccLower:$l_dst, mem10:$k_dst),
 // Exchange return address and general purpose memory location. This instruction
 // corrects overflow of the return address value if the destination is not also
 // a 16 bit memory location.
-let Constraints = "$k = $k_dst", isExtracode = 1 in
+let Constraints = "$k = $k_dst", isExtracode = 1,
+    DecoderNamespace = "Extracode" in
 def QXCH : ALUWriteInst<0b01001, (outs RA:$q_dst, mem10:$k_dst),
                         (ins RA:$q, mem10:$k), "qxch">;
 
@@ -298,11 +312,11 @@ let Defs = [R5] in
 def TCF : TCInst<0b001, (outs), (ins address12:$k), "tcf">;
 
 // Branch if accumulator is zero to fixed address.
-let Defs = [R5], isExtracode = 1 in
+let Defs = [R5], isExtracode = 1, DecoderNamespace = "Extracode" in
 def BZF : BranchInst<0b001, (outs), (ins Acc:$a, address12:$k), "bzf">;
 
 // Branch if accumulator is zero or a negative number to fixed address.
-let Defs = [R5], isExtracode = 1 in
+let Defs = [R5], isExtracode = 1, DecoderNamespace = "Extracode" in
 def BZMF : BranchInst<0b110, (outs), (ins Acc:$a, address12:$k), "bzmf">;
 
 //===----------------------------------------------------------------------===//

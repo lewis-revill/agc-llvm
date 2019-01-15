@@ -1,10 +1,12 @@
 # RUN: llvm-mc -triple agc -show-encoding < %s \
 # RUN:     | FileCheck -check-prefixes=CHECK,CHECK-INST %s
+# RUN: llvm-mc -triple agc -filetype=obj < %s | llvm-objdump -d - \
+# RUN:     | FileCheck -check-prefixes=CHECK-INST %s
 
 # CHECK-INST: ca 0
 # CHECK: encoding: [0x60,0x01]
 CA   0
-# CHECK-INST: ca K
+# CHECK-INST: ca
 # CHECK: encoding: [0x60,0x01]
 CA   K
 # CHECK-INST: ca 7777
@@ -17,7 +19,7 @@ CA   7777
 EXTEND
 DCA  0
 # CHECK-INST: extend
-# CHECK-INST: dca K
+# CHECK-INST: dca
 # CHECK: encoding: [0x00,0x0d,0x60,0x01]
 EXTEND
 DCA  K
@@ -30,7 +32,7 @@ DCA  7777
 # CHECK-INST: cs 0
 # CHECK: encoding: [0x80,0x00]
 CS   0
-# CHECK-INST: cs K
+# CHECK-INST: cs
 # CHECK: encoding: [0x80,0x00]
 CS   K
 # CHECK-INST: cs 7777
@@ -43,7 +45,7 @@ CS   7777
 EXTEND
 DCS  0
 # CHECK-INST: extend
-# CHECK-INST: dcs K
+# CHECK-INST: dcs
 # CHECK: encoding: [0x00,0x0d,0x80,0x00]
 EXTEND
 DCS  K
@@ -56,7 +58,7 @@ DCS  7777
 # CHECK-INST: ad 0
 # CHECK: encoding: [0xc0,0x01]
 AD   0
-# CHECK-INST: ad K
+# CHECK-INST: ad
 # CHECK: encoding: [0xc0,0x01]
 AD   K
 # CHECK-INST: ad 7777
@@ -69,7 +71,7 @@ AD   7777
 EXTEND
 SU   0
 # CHECK-INST: extend
-# CHECK-INST: su K
+# CHECK-INST: su
 # CHECK: encoding: [0x00,0x0d,0xc0,0x01]
 EXTEND
 SU   K
@@ -82,7 +84,7 @@ SU   1777
 # CHECK-INST: das 0
 # CHECK: encoding: [0x40,0x00]
 DAS  0
-# CHECK-INST: das K
+# CHECK-INST: das
 # CHECK: encoding: [0x40,0x00]
 DAS  K
 # CHECK-INST: das 1777
@@ -95,7 +97,7 @@ DAS  1777
 EXTEND
 MSU  0
 # CHECK-INST: extend
-# CHECK-INST: msu K
+# CHECK-INST: msu
 # CHECK: encoding: [0x00,0x0d,0x40,0x00]
 EXTEND
 MSU  K
@@ -108,7 +110,7 @@ MSU  1777
 # CHECK-INST: mask 0
 # CHECK: encoding: [0xe0,0x00]
 MASK 0
-# CHECK-INST: mask K
+# CHECK-INST: mask
 # CHECK: encoding: [0xe0,0x00]
 MASK K
 # CHECK-INST: mask 7777
@@ -121,7 +123,7 @@ MASK 7777
 EXTEND
 MP   0
 # CHECK-INST: extend
-# CHECK-INST: mp K
+# CHECK-INST: mp
 # CHECK: encoding: [0x00,0x0d,0xe0,0x00]
 EXTEND
 MP   K
@@ -137,7 +139,7 @@ MP   7777
 EXTEND
 DV   0
 # CHECK-INST: extend
-# CHECK-INST: dv K
+# CHECK-INST: dv
 # CHECK: encoding: [0x00,0x0d,0x20,0x00]
 EXTEND
 DV   K
@@ -150,7 +152,7 @@ DV   1777
 # CHECK-INST: incr 0
 # CHECK: encoding: [0x50,0x01]
 INCR 0
-# CHECK-INST: incr K
+# CHECK-INST: incr
 # CHECK: encoding: [0x50,0x01]
 INCR K
 # CHECK-INST: incr 1777
@@ -163,7 +165,7 @@ INCR 1777
 EXTEND
 AUG  0
 # CHECK-INST: extend
-# CHECK-INST: aug K
+# CHECK-INST: aug
 # CHECK: encoding: [0x00,0x0d,0x50,0x01]
 EXTEND
 AUG  K
@@ -176,7 +178,7 @@ AUG  1777
 # CHECK-INST: ads 0
 # CHECK: encoding: [0x58,0x00]
 ADS  0
-# CHECK-INST: ads K
+# CHECK-INST: ads
 # CHECK: encoding: [0x58,0x00]
 ADS  K
 # CHECK-INST: ads 1777
@@ -189,7 +191,7 @@ ADS  1777
 EXTEND
 DIM  0
 # CHECK-INST: extend
-# CHECK-INST: dim K
+# CHECK-INST: dim
 # CHECK: encoding: [0x00,0x0d,0x58,0x00]
 EXTEND
 DIM  K
@@ -202,7 +204,7 @@ DIM  1777
 # CHECK-INST: ts 0
 # CHECK: encoding: [0xb0,0x00]
 TS   0
-# CHECK-INST: ts K
+# CHECK-INST: ts
 # CHECK: encoding: [0xb0,0x00]
 TS   K
 # CHECK-INST: ts 1777
@@ -212,7 +214,7 @@ TS   1777
 # CHECK-INST: xch 0
 # CHECK: encoding: [0xb8,0x01]
 XCH  0
-# CHECK-INST: xch K
+# CHECK-INST: xch
 # CHECK: encoding: [0xb8,0x01]
 XCH  K
 # CHECK-INST: xch 1777
@@ -222,7 +224,7 @@ XCH  1777
 # CHECK-INST: lxch 0
 # CHECK: encoding: [0x48,0x01]
 LXCH 0
-# CHECK-INST: lxch K
+# CHECK-INST: lxch
 # CHECK: encoding: [0x48,0x01]
 LXCH K
 # CHECK-INST: lxch 1777
@@ -235,7 +237,7 @@ LXCH 1777
 EXTEND
 QXCH 0
 # CHECK-INST: extend
-# CHECK-INST: qxch K
+# CHECK-INST: qxch
 # CHECK: encoding: [0x00,0x0d,0x48,0x01]
 EXTEND
 QXCH K
@@ -248,7 +250,7 @@ QXCH 1777
 # CHECK-INST: dxch 0
 # CHECK: encoding: [0xa8,0x00]
 DXCH 0
-# CHECK-INST: dxch K
+# CHECK-INST: dxch
 # CHECK: encoding: [0xa8,0x00]
 DXCH K
 # CHECK-INST: dxch 1777
@@ -258,7 +260,7 @@ DXCH 1777
 # CHECK-INST: tc 0
 # CHECK: encoding: [0x00,0x01]
 TC   0
-# CHECK-INST: tc K
+# CHECK-INST: tc
 # CHECK: encoding: [0x00,0x01]
 TC   K
 # CHECK-INST: tc 7777
@@ -268,7 +270,7 @@ TC   7777
 # CHECK-INST: tcf 0
 # CHECK: encoding: [0x20,0x00]
 TCF  0
-# CHECK-INST: tcf K
+# CHECK-INST: tcf
 # CHECK: encoding: [0x20,0x00]
 TCF  K
 # CHECK-INST: tcf 7777
@@ -303,7 +305,7 @@ BZMF 7777
 EXTEND
 READ 0
 # CHECK-INST: extend
-# CHECK-INST: read KC
+# CHECK-INST: read
 # CHECK: encoding: [0x00,0x0d,0x00,0x01]
 EXTEND
 READ KC
@@ -319,7 +321,7 @@ READ 777
 EXTEND
 WRITE 0
 # CHECK-INST: extend
-# CHECK-INST: write KC
+# CHECK-INST: write
 # CHECK: encoding: [0x00,0x0d,0x04,0x00]
 EXTEND
 WRITE KC
@@ -335,7 +337,7 @@ WRITE 777
 EXTEND
 RAND 0
 # CHECK-INST: extend
-# CHECK-INST: rand KC
+# CHECK-INST: rand
 # CHECK: encoding: [0x00,0x0d,0x08,0x00]
 EXTEND
 RAND KC
@@ -351,7 +353,7 @@ RAND 777
 EXTEND
 WAND 0
 # CHECK-INST: extend
-# CHECK-INST: wand KC
+# CHECK-INST: wand
 # CHECK: encoding: [0x00,0x0d,0x0c,0x01]
 EXTEND
 WAND KC
@@ -367,7 +369,7 @@ WAND 777
 EXTEND
 ROR  0
 # CHECK-INST: extend
-# CHECK-INST: ror KC
+# CHECK-INST: ror
 # CHECK: encoding: [0x00,0x0d,0x10,0x00]
 EXTEND
 ROR  KC
@@ -383,7 +385,7 @@ ROR  777
 EXTEND
 WOR  0
 # CHECK-INST: extend
-# CHECK-INST: wor KC
+# CHECK-INST: wor
 # CHECK: encoding: [0x00,0x0d,0x14,0x01]
 EXTEND
 WOR  KC
@@ -399,7 +401,7 @@ WOR  777
 EXTEND
 RXOR 0
 # CHECK-INST: extend
-# CHECK-INST: rxor KC
+# CHECK-INST: rxor
 # CHECK: encoding: [0x00,0x0d,0x18,0x01]
 EXTEND
 RXOR KC
