@@ -2,6 +2,78 @@
 
 ; Check that basic ALU operations can be lowered to AGC instructions.
 
+define i16 @addi(i16 %a) {
+entry:
+; CHECK-LABEL: addi:
+; CHECK: setloc 1
+; CHECK: oct 52
+; CHECK: bank 2
+; CHECK: ad 1
+; CHECK: tc 2
+  %0 = add i16 %a, 42
+  ret i16 %0
+}
+
+define i16 @subi(i16 %a) {
+entry:
+; CHECK-LABEL: subi:
+; CHECK: setloc 1
+; CHECK: oct 77725
+; CHECK: bank 2
+; CHECK: ad 1
+; CHECK: tc 2
+  %0 = sub i16 %a, 42
+  ret i16 %0
+}
+
+define i16 @andi(i16 %a) {
+entry:
+; CHECK-LABEL: andi:
+; CHECK: setloc 1
+; CHECK: oct 52
+; CHECK: bank 2
+; CHECK: mask 1
+; CHECK: tc 2
+  %0 = and i16 %a, 42
+  ret i16 %0
+}
+
+define i16 @addi_explicitsection(i16 %a) #0 {
+entry:
+; CHECK-LABEL: addi_explicitsection:
+; CHECK: setloc 1
+; CHECK: oct 52
+; CHECK: bank 20
+; CHECK: ad 1
+; CHECK: tc 2
+  %0 = add i16 %a, 42
+  ret i16 %0
+}
+
+define i16 @subi_explicitsection(i16 %a) #0 {
+entry:
+; CHECK-LABEL: subi_explicitsection:
+; CHECK: setloc 1
+; CHECK: oct 77725
+; CHECK: bank 20
+; CHECK: ad 1
+; CHECK: tc 2
+  %0 = sub i16 %a, 42
+  ret i16 %0
+}
+
+define i16 @andi_explicitsection(i16 %a) #0 {
+entry:
+; CHECK-LABEL: andi_explicitsection:
+; CHECK: setloc 1
+; CHECK: oct 52
+; CHECK: bank 20
+; CHECK: mask 1
+; CHECK: tc 2
+  %0 = and i16 %a, 42
+  ret i16 %0
+}
+
 define i16 @add(i16 %a, i16 %b) {
 entry:
 ; CHECK-LABEL: add:
@@ -64,3 +136,5 @@ entry:
   %2 = trunc i32 %1 to i16
   ret i16 %2
 }
+
+attributes #0 = { "implicit-section-name"="BANK16" }

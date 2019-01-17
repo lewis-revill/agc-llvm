@@ -59,6 +59,7 @@ public:
   }
 
   bool addInstSelector() override;
+  void addPreEmitPass2() override;
 };
 }
 
@@ -67,6 +68,8 @@ bool AGCPassConfig::addInstSelector() {
 
   return false;
 }
+
+void AGCPassConfig::addPreEmitPass2() { addPass(createAGCExpandPseudoPass()); }
 
 TargetPassConfig *AGCTargetMachine::createPassConfig(PassManagerBase &PM) {
   return new AGCPassConfig(*this, PM);

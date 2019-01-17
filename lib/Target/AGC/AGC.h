@@ -22,12 +22,16 @@ class MachineInstr;
 class MachineOperand;
 class MCInst;
 class MCOperand;
+class PassRegistry;
 
 bool LowerAGCMachineOperandToMCOperand(const MachineOperand &MO,
                                        MCOperand &MCOp);
 void LowerAGCMachineInstrToMCInst(const MachineInstr *MI, MCInst &OutMI);
 
 FunctionPass *createAGCISelDag(AGCTargetMachine &TM);
+
+FunctionPass *createAGCExpandPseudoPass();
+void initializeAGCExpandPseudoPass(PassRegistry &);
 }
 
 #endif // LLVM_LIB_TARGET_AGC_AGC_H

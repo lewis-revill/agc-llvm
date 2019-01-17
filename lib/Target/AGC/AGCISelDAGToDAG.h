@@ -30,6 +30,8 @@ public:
   void Select(SDNode *Node) override;
 
 #include "AGCGenDAGISel.inc"
+private:
+  void SelectAGCConstant(SDNode *Node);
 };
 } // namespace llvm
 

@@ -15,6 +15,7 @@ add_public_tablegen_target(AGCCommonTableGen)
 
 add_llvm_target(AGCCodeGen
   AGCAsmPrinter.cpp
+  AGCExpandPseudos.cpp
   AGCFrameLowering.cpp
   AGCInstrInfo.cpp
   AGCISelDAGToDAG.cpp

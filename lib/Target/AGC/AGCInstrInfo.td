@@ -72,6 +72,9 @@ def imm15 : Operand<i16>, ImmLeaf<i16, [{return isUInt<15>(Imm);}]> {
   let ParserMatchClass = AGCAsmOperand<"Imm15">;
 }
 
+// A 16 bit immediate expanded in codegen.
+def imm16 : Operand<i16>;
+
 //===----------------------------------------------------------------------===//
 // Instruction class templates
 //===----------------------------------------------------------------------===//
@@ -394,6 +397,10 @@ let isBarrier = 1, isReturn = 1, isTerminator = 1 in
 def PseudoRET : Pseudo<(outs), (ins), "ret", "", [(RetFlag)]>,
                 PseudoInstExpansion<(TC 2)>;
 
+// Pseudo instruction used to expand a materialized constant.
+def PseudoCONST : Pseudo<(outs address12:$k), (ins imm16:$value), "const",
+                         "$value", []>;
+
 //===----------------------------------------------------------------------===//
 // Directives
 //===----------------------------------------------------------------------===//
@@ -403,7 +410,7 @@ let isCodeGenOnly = 0, isAsmParserOnly = 1 in
 def DirectiveBLOCK : Pseudo<(outs), (ins block2:$block), "block", "$block", []>;
 
 // Switch banks for assembly output.
-let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+let isCodeGenOnly = 0 in
 def DirectiveBANK : Pseudo<(outs), (ins bank6:$bank), "bank", "$bank", []>;
 
 // Print out the number of instructions in a bank for debugging.
@@ -415,9 +422,9 @@ let isCodeGenOnly = 0, isAsmParserOnly = 1 in
 def DirectiveERASE : Pseudo<(outs), (ins address12:$n), "erase", "$n", []>;
 
 // Set the location to an explicit address in the assembly output.
-let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+let isCodeGenOnly = 0 in
 def DirectiveSETLOC : Pseudo<(outs), (ins address12:$n), "setloc", "$n", []>;
 
 // Emit an explicit immediate word to the assembly output.
-let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+let isCodeGenOnly = 0 in
 def DirectiveOCT : Pseudo<(outs), (ins imm15:$value), "oct", "$value", []>;
