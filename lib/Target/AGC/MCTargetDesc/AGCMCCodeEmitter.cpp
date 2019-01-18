@@ -55,7 +55,18 @@ void AGCMCCodeEmitter::emitBitsWithParity(raw_ostream &OS, uint16_t Bits) {
 void AGCMCCodeEmitter::encodeInstruction(const MCInst &MI, raw_ostream &OS,
                                          SmallVectorImpl<MCFixup> &Fixups,
                                          const MCSubtargetInfo &STI) const {
-  const MCInstrDesc &Desc = MCII.get(MI.getOpcode());
+  unsigned Opcode = MI.getOpcode();
+  switch (Opcode) {
+  default:
+    break;
+  case AGC::DirectiveERASE: {
+    int64_t NumWords = MI.getOperand(0).getImm();
+    for (;NumWords > 0; --NumWords)
+      emitBitsWithParity(OS, 0x0000);
+    return;
+  }
+  }
+  const MCInstrDesc &Desc = MCII.get(Opcode);
   assert(Desc.getSize() == 2);
 
   // Handle extracode instructions.

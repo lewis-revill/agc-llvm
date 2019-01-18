@@ -1,4 +1,6 @@
 # RUN: llvm-mc -triple agc < %s | FileCheck %s
+# RUN: llvm-mc -triple agc -filetype=obj < %s | llvm-objdump -d - \
+# RUN:     | FileCheck --check-prefix=CHECK-OBJ %s
 
 # CHECK: block 0
 BLOCK 0
@@ -181,3 +183,13 @@ LEMONM EQUALS 56
 OUTLINK EQUALS 57
 # CHECK: .set ALTM, 60
 ALTM EQUALS 60
+
+# CHECK-OBJ: 00 01 tc 0
+ERASE 1
+# CHECK-OBJ: 00 01 tc 0
+# CHECK-OBJ: 00 01 tc 0
+ERASE 2
+# CHECK-OBJ: 00 01 tc 0
+# CHECK-OBJ: 00 01 tc 0
+# CHECK-OBJ: 00 01 tc 0
+ERASE 3

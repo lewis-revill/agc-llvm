@@ -404,3 +404,7 @@ def DirectiveBANK : Pseudo<(outs), (ins bank6:$bank), "bank", "$bank", []>;
 // Print out the number of instructions in a bank for debugging.
 let isCodeGenOnly = 0, isAsmParserOnly = 1 in
 def DirectiveBNKSUM : Pseudo<(outs), (ins bank6:$bank), "bnksum", "$bank", []>;
+
+// Set a number of words to zero in the assembly output.
+let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+def DirectiveERASE : Pseudo<(outs), (ins address12:$n), "erase", "$n", []>;
