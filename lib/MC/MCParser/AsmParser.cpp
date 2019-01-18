@@ -1844,6 +1844,18 @@ bool AsmParser::parseStatement(ParseStatementInfo &Info,
 
     return parseAssignment(IDVal, true);
 
+  /* BEGIN AGC CODE */
+  case AsmToken::Identifier: {
+    StringRef NextVal = Lexer.getTok().getString().lower();
+    if (NextVal != "equals")
+      break;
+    // identifier 'equals' ... -> assignment statement
+    Lex();
+
+    return parseAssignment(IDVal, true);
+  }
+  /* END AGC CODE */
+
   default: // Normal instruction or directive.
     break;
   }
