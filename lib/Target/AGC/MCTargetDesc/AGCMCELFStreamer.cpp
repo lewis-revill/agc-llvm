@@ -62,6 +62,16 @@ void AGCMCELFStreamer::EmitInstruction(const MCInst &Inst,
     // to the current section.
     return;
   }
+  case AGC::DirectiveSETLOC: {
+    // The setloc directive informs the assembler to output to an explicit
+    // address. This is implemented by switching to a new section encoding the
+    // address and letting the linker handle it.
+    StringRef SectionName = "ADDR" + itostr(Inst.getOperand(0).getImm());
+    MCSection *Section = ((MCSection *)getContext().getELFSection(
+        SectionName, ELF::SHT_PROGBITS, ELF::SHF_EXECINSTR | ELF::SHF_ALLOC));
+    SwitchSection(Section, nullptr);
+    return;
+  }
   }
   MCELFStreamer::EmitInstruction(Inst, STI);
 }

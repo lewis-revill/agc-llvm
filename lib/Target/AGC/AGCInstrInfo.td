@@ -408,3 +408,7 @@ def DirectiveBNKSUM : Pseudo<(outs), (ins bank6:$bank), "bnksum", "$bank", []>;
 // Set a number of words to zero in the assembly output.
 let isCodeGenOnly = 0, isAsmParserOnly = 1 in
 def DirectiveERASE : Pseudo<(outs), (ins address12:$n), "erase", "$n", []>;
+
+// Set the location to an explicit address in the assembly output.
+let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+def DirectiveSETLOC : Pseudo<(outs), (ins address12:$n), "setloc", "$n", []>;
