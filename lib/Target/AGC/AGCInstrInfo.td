@@ -67,6 +67,11 @@ def block2 : Operand<i16>,
   let ParserMatchClass = AGCAsmOperand<"Block2">;
 }
 
+// A 15 bit immediate representing an entire data word.
+def imm15 : Operand<i16>, ImmLeaf<i16, [{return isUInt<15>(Imm);}]> {
+  let ParserMatchClass = AGCAsmOperand<"Imm15">;
+}
+
 //===----------------------------------------------------------------------===//
 // Instruction class templates
 //===----------------------------------------------------------------------===//
@@ -412,3 +417,7 @@ def DirectiveERASE : Pseudo<(outs), (ins address12:$n), "erase", "$n", []>;
 // Set the location to an explicit address in the assembly output.
 let isCodeGenOnly = 0, isAsmParserOnly = 1 in
 def DirectiveSETLOC : Pseudo<(outs), (ins address12:$n), "setloc", "$n", []>;
+
+// Emit an explicit immediate word to the assembly output.
+let isCodeGenOnly = 0, isAsmParserOnly = 1 in
+def DirectiveOCT : Pseudo<(outs), (ins imm15:$value), "oct", "$value", []>;

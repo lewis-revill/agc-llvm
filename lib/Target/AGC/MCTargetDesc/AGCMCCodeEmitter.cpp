@@ -65,6 +65,9 @@ void AGCMCCodeEmitter::encodeInstruction(const MCInst &MI, raw_ostream &OS,
       emitBitsWithParity(OS, 0x0000);
     return;
   }
+  case AGC::DirectiveOCT:
+    emitBitsWithParity(OS, (uint16_t)MI.getOperand(0).getImm());
+    return;
   }
   const MCInstrDesc &Desc = MCII.get(Opcode);
   assert(Desc.getSize() == 2);

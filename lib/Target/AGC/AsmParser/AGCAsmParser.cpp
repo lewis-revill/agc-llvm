@@ -144,6 +144,10 @@ public:
     return isUInt<2>(Imm) && Imm != 1;
   }
 
+  bool isImm15() const {
+    return (isConstantImm() && isUInt<15>(getConstantImm())) || isSymbolRef();
+  }
+
   /// getStartLoc - Gets location of the first token of this operand
   SMLoc getStartLoc() const override { return StartLoc; }
   /// getEndLoc - Gets location of the last token of this operand
@@ -376,6 +380,12 @@ bool AGCAsmParser::MatchAndEmitInstruction(SMLoc IDLoc, unsigned &Opcode,
   case Match_InvalidBlock2: {
     SMLoc ErrorLoc = Operands[ErrorInfo]->getStartLoc();
     return Error(ErrorLoc, "block number must be either 0, 2 or 3");
+  }
+  case Match_InvalidImm15: {
+    SMLoc ErrorLoc = Operands[ErrorInfo]->getStartLoc();
+    return Error(
+        ErrorLoc,
+        "operand must be an immediate in the range [0, 32767] or a symbol");
   }
   }
 }
