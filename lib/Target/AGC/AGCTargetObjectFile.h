@@ -19,6 +19,9 @@
 namespace llvm {
 class AGCELFTargetObjectFile : public TargetLoweringObjectFileELF {
   void Initialize(MCContext &Ctx, const TargetMachine &TM) override;
+
+  MCSection *SelectSectionForGlobal(
+    const GlobalObject *GO, SectionKind Kind, const TargetMachine &TM) const override;
 };
 } // namespace llvm
 
