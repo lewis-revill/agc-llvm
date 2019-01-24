@@ -13,6 +13,7 @@
 
 #include "AGC.h"
 #include "AGCTargetMachine.h"
+#include "AGCTargetObjectFile.h"
 #include "MCTargetDesc/AGCMCTargetDesc.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
@@ -42,7 +43,7 @@ AGCTargetMachine::AGCTargetMachine(const Target &T, const Triple &TT,
     : LLVMTargetMachine(T, "e-m:e-p:16:16-n16-S16", TT, CPU, FS, Options,
                         getEffectiveRelocModel(RM),
                         getEffectiveCodeModel(CM, CodeModel::Small), OL),
-      TLOF(make_unique<TargetLoweringObjectFileELF>()),
+      TLOF(make_unique<AGCELFTargetObjectFile>()),
       Subtarget(TT, CPU, FS, *this) {
   initAsmInfo();
 }

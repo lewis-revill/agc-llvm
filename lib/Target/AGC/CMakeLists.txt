@@ -23,6 +23,7 @@ add_llvm_target(AGCCodeGen
   AGCRegisterInfo.cpp
   AGCSubtarget.cpp
   AGCTargetMachine.cpp
+  AGCTargetObjectFile.cpp
   )
 
 add_subdirectory(AsmParser)

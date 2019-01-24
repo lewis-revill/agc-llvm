@@ -30,5 +30,5 @@ has_disassembler = 1
 type = Library
 name = AGCCodeGen
 parent = AGC
-required_libraries = AsmPrinter Core CodeGen SelectionDAG Support Target AGCAsmPrinter AGCInfo
+required_libraries = AsmPrinter Core CodeGen MC SelectionDAG Support Target AGCAsmPrinter AGCInfo
 add_to_library_groups = AGC
