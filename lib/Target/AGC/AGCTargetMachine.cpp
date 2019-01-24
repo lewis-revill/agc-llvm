@@ -11,6 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "AGC.h"
 #include "AGCTargetMachine.h"
 #include "MCTargetDesc/AGCMCTargetDesc.h"
 #include "llvm/ADT/STLExtras.h"
@@ -41,10 +42,31 @@ AGCTargetMachine::AGCTargetMachine(const Target &T, const Triple &TT,
     : LLVMTargetMachine(T, "e-m:e-p:16:16-n16-S16", TT, CPU, FS, Options,
                         getEffectiveRelocModel(RM),
                         getEffectiveCodeModel(CM, CodeModel::Small), OL),
-      TLOF(make_unique<TargetLoweringObjectFileELF>()) {
+      TLOF(make_unique<TargetLoweringObjectFileELF>()),
+      Subtarget(TT, CPU, FS, *this) {
   initAsmInfo();
 }
 
+namespace {
+class AGCPassConfig : public TargetPassConfig {
+public:
+  AGCPassConfig(AGCTargetMachine &TM, PassManagerBase &PM)
+      : TargetPassConfig(TM, PM) {}
+
+  AGCTargetMachine &getAGCTargetMachine() const {
+    return getTM<AGCTargetMachine>();
+  }
+
+  bool addInstSelector() override;
+};
+}
+
+bool AGCPassConfig::addInstSelector() {
+  addPass(createAGCISelDag(getAGCTargetMachine()));
+
+  return false;
+}
+
 TargetPassConfig *AGCTargetMachine::createPassConfig(PassManagerBase &PM) {
-  return new TargetPassConfig(*this, PM);
+  return new AGCPassConfig(*this, PM);
 }

@@ -14,10 +14,11 @@
 include "llvm/Target/Target.td"
 
 //===----------------------------------------------------------------------===//
-// Register file, instruction descriptions
+// Register file, calling convention, instruction descriptions
 //===----------------------------------------------------------------------===//
 
 include "AGCRegisterInfo.td"
+include "AGCCallingConv.td"
 include "AGCInstrInfo.td"
 
 def AGCInstrInfo : InstrInfo;

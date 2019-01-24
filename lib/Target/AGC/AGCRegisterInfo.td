@@ -106,6 +106,22 @@ let SubRegIndices = [subreg_upper, subreg_lower] in
 def RD0 : AGCRegWithSubRegs<0, "AL", [R0, R1]>, DwarfRegNum<[8]>;
 
 //===----------------------------------------------------------------------===//
+// AGC memory location registers
+//===----------------------------------------------------------------------===//
+
+foreach Index = 8-4095 in {
+  def R#Index : AGCReg<Index, "R"#Index>, DwarfRegNum<[-1]>;
+}
+
+foreach Index = 1-4094 in {
+  let SubRegIndices = [subreg_upper, subreg_lower] in
+  def RD#Index : AGCRegWithSubRegs<Index, "RD"#Index,
+                                   [!cast<AGCReg>("R"#Index),
+                                    !cast<AGCReg>("R"#!add(Index, 1))]>,
+                 DwarfRegNum<[-1]>;
+}
+
+//===----------------------------------------------------------------------===//
 // AGC internal register class
 //===----------------------------------------------------------------------===//
 
@@ -120,3 +136,23 @@ def AccPair : RegisterClass<"AGC", [i32], 1, (add RD0)>;
 
 // Define the return address register as its own register class.
 def RA : RegisterClass<"AGC", [i16], 1, (add R2)>;
+
+// Define a register class that maps directly to all memory locations.
+def MM12 : RegisterClass<"AGC", [i16], 4096, (add
+    (sequence "R%u", 0, 4095)
+)>;
+
+// Define a register class that maps directly to all memory pairs.
+def MMD12 : RegisterClass<"AGC", [i32], 4095, (add
+    (sequence "RD%u", 0, 4094)
+)>;
+
+// Define a register class that maps directly to erasable memory locations.
+def MM10 : RegisterClass<"AGC", [i16], 1024, (add
+    (sequence "R%u", 0, 1023)
+)>;
+
+// Define a register class that maps directly to erasable memory pairs.
+def MMD10 : RegisterClass<"AGC", [i32], 1023, (add
+    (sequence "RD%u", 0, 1022)
+)>;
